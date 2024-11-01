@@ -2,7 +2,10 @@ module f1_fsm (
     input   logic       rst,
     input   logic       en,
     input   logic       clk,
-    output  logic [7:0] data_out
+    input logic trigger,
+    output  logic [7:0] data_out,
+    output logic cmd_seq,
+    output logic cmd_delay,
 );
     //Define States
     typedef enum  {S0, S1, S2, S3, S4, S5, S6, S7, S8} my_state;
@@ -10,11 +13,12 @@ module f1_fsm (
 
     //output
     logic [7:0] output_val;
-
+ 
     //State registers
     always_ff @(posedge clk, posedge rst)
+        cmd_seq = (current_state != S0);
         if (rst) current_state <= S0;
-        else current_state <= next_state;
+        else if (trigger) current_state <= next_state;
 
     //Next State Logic
     always_comb
@@ -60,6 +64,11 @@ module f1_fsm (
                 output_val = 8'b0;
             end
         endcase
+
+    
+
+
+
 
     //output logic
     assign data_out = output_val;

@@ -10,7 +10,7 @@ module f1_fsm (
 
     //output
     logic [7:0] output_val;
-
+ 
     //State registers
     always_ff @(posedge clk, posedge rst)
         if (rst) current_state <= S0;
